@@ -64,15 +64,6 @@ class UserControllerTest {
     }
 
     @Test
-    void createUserNameIsBlanc() {
-        user.setName("");
-        Throwable thrown = assertThrows(ValidationException.class, () -> {
-            userController.createUser(user);
-        });
-        assertNotNull(thrown.getMessage());
-    }
-
-    @Test
     void createUserBirthdayAfterNow() {
         user.setBirthday(LocalDate.now().plusDays(1));
         Throwable thrown = assertThrows(ValidationException.class, () -> {
