@@ -9,19 +9,19 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Slf4j
-@RestController("/films")
+@RestController
 public class FilmController {
 
-    private static final LocalDate DATE_FIRST_FILM = LocalDate.of(1985, 12, 28);
+    private static final LocalDate DATE_FIRST_FILM = LocalDate.of(1895, 12, 28);
 
     private final Map<Integer, Film> films = new HashMap<>();
 
-    @GetMapping("/get-films")
+    @GetMapping("/films")
     public Collection<Film> getFilms(){
         return films.values();
     }
 
-    @PostMapping("/add-film")
+    @PostMapping("/films")
     public Film addFilm(@RequestBody Film film){
         if (film.getName().isBlank() ||
                 film.getDescription().length() > 200 ||
@@ -36,10 +36,15 @@ public class FilmController {
         return film;
     }
 
-    @PutMapping("/update-film")
+    @PutMapping("/films")
     public Film updateFilm(@RequestBody Film film){
-        films.put(film.getId(), film);
-        log.info("Обновлен фильм: {}", film.toString());
+        if(films.containsKey(film.getId())) {
+            films.put(film.getId(), film);
+            log.info("Обновлен фильм: {}", film.toString());
+        } else {
+            log.error("Id film not found");
+            throw new ValidationException("Id film not found");
+        }
         return film;
     }
 

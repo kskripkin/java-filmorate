@@ -9,24 +9,23 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Slf4j
-@RestController("/users")
+@RestController
 public class UserController {
 
     private final Map<Integer, User> users = new HashMap();
 
-    @GetMapping("/get-all-users")
+    @GetMapping("/users")
     public Collection<User> getUsers(){
         return users.values();
     }
 
-    @PostMapping("/create-user")
+    @PostMapping("/users")
     public User createUser(@RequestBody User user){
         if(user.getEmail() == null ||
                 user.getEmail().isBlank() ||
                 !user.getEmail().contains("@") ||
                 user.getLogin().contains(" ") ||
                 user.getLogin().isBlank() ||
-                user.getName().isBlank() ||
                 user.getBirthday().isAfter(LocalDate.now())
         ) {
             log.error("Ошибка входящих данных. Проверьте переданные данные.");
@@ -40,10 +39,15 @@ public class UserController {
         return user;
     }
 
-    @PutMapping("/update-user")
+    @PutMapping("/users")
     public User updateUser(@RequestBody User user){
-        users.put(user.getId(), user);
-        log.info("Обновлен пользователь: {}", user.toString());
+        if(users.containsKey(user.getId())) {
+            users.put(user.getId(), user);
+            log.info("Обновлен пользователь: {}", user.toString());
+        } else {
+            log.error("Id user not found");
+            throw new ValidationException("Id user not found");
+        }
         return user;
     }
 }
