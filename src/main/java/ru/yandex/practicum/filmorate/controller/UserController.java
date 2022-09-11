@@ -13,6 +13,7 @@ import java.util.*;
 public class UserController {
 
     private final Map<Integer, User> users = new HashMap();
+    private int id = 1;
 
     @GetMapping("/users")
     public Collection<User> getUsers(){
@@ -31,8 +32,11 @@ public class UserController {
             log.error("Ошибка входящих данных. Проверьте переданные данные.");
             throw new ValidationException("Ошибка входящих данных. Проверьте переданные данные.");
         }
-        if(user.getName().isBlank()){
+        if(user.getName() == null){
             user.setName(user.getLogin());
+        }
+        if(user.getId() == 0){
+            user.setId(id++);
         }
         users.put(user.getId(), user);
         log.info("Добавлен пользователь: {}", user.toString());
