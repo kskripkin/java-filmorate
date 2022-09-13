@@ -1,2 +1,2 @@
 # java-filmorate
-Template repository for Filmorate project.
+В спринте 9 создан каркас для создания, обновления и получения пользователей и фильмов.
