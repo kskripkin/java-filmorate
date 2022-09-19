@@ -13,4 +13,12 @@ public class User {
     private String name;
     private LocalDate birthday;
     private Set<Long> friends;
+
+    public void setFriend(long id){
+        friends.add(id);
+    }
+
+    public void deleteFriend(long id){
+        friends.remove(id);
+    }
 }

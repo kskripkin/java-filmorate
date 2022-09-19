@@ -14,7 +14,7 @@ import java.util.Map;
 @Component
 public class InMemoryUserStorage implements UserStorage{
 
-    private final Map<Integer, User> users = new HashMap();
+    private final static Map<Integer, User> users = new HashMap();
     private int id = 1;
 
     public Collection<User> getUsers(){

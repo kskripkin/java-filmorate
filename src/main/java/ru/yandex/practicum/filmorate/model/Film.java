@@ -13,4 +13,12 @@ public class Film {
     private LocalDate releaseDate;
     private int duration;
     private Set<Long> likes;
+
+    public void setLike(long idUser){
+        likes.add(idUser);
+    }
+
+    public void deleteLike(long idUser){
+        likes.remove(idUser);
+    }
 }

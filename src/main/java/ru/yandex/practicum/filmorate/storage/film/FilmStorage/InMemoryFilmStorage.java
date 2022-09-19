@@ -14,7 +14,7 @@ import java.util.Map;
 @Component
 public class InMemoryFilmStorage implements FilmStorage{
 
-    private final Map<Integer, Film> films = new HashMap<>();
+    private final static Map<Integer, Film> films = new HashMap<>();
     private int id = 1;
 
     public Collection<Film> getFilms(){
