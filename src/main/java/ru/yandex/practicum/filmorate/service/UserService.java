@@ -1,12 +1,12 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.ExceptionHandler;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.UserStorage;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -14,11 +14,6 @@ public class UserService {
 
     private UserStorage userStorage = new InMemoryUserStorage();
 
-    /*
-    Создайте UserService, который будет отвечать за такие операции с пользователями, как добавление в друзья,
-    удаление из друзей, вывод списка общих друзей. Пока пользователям не надо одобрять заявки в друзья — добавляем сразу.
-    То есть если Лена стала другом Саши, то это значит, что Саша теперь друг Лены.
-     */
     private Collection<User> users;
 
     public void addFriend(int idFirst, int idSecond){
@@ -47,14 +42,23 @@ public class UserService {
         }
     }
 
-    public Collection<Long> showListFriends(int id){
+    public Collection<User> showListFriends(int id){
         users = userStorage.getUsers();
+        Set<Long> idFriends = null;
+        Set<User> listUsers = null;
         for (User user : users){
             if (user.getId() == id){
-                return user.getFriends();
+                idFriends = user.getFriends();
             }
         }
-        return null;
+        for (User user : users){
+            for (Long idFriend : idFriends){
+                if(user.getId() == idFriend){
+                    listUsers.add(user);
+                }
+            }
+        }
+        return listUsers;
     }
 
     public Collection<User> showJoinListFriends(int idFirstUser, int idSecondUser){
@@ -90,4 +94,16 @@ public class UserService {
 
         return finalListUser;
     }
+
+    public User getUser(int id){
+        users = userStorage.getUsers();
+        for (User user : users){
+            if(user.getId() == id){
+                return user;
+            }
+        }
+        throw new ExceptionHandler();
+    }
+
+
 }

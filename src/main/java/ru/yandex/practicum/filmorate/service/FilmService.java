@@ -1,14 +1,14 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.ExceptionHandler;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.UserStorage;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class FilmService {
@@ -23,27 +23,33 @@ public class FilmService {
      */
     private Collection<Film> films;
 
-    public void addLike(int idFilm, int idUser){
+    public Film addLike(int idFilm, int idUser){
         films = filmStorage.getFilms();
         for (Film film : films){
             if (film.getId() == idFilm){
                 film.setLike(idUser);
+                return film;
             }
         }
+        throw new ExceptionHandler();
     }
 
-    public void deleteLike(int idFilm, int idUser){
+    public Film deleteLike(int idFilm, int idUser){
         films = filmStorage.getFilms();
         for (Film film : films){
             if (film.getId() == idFilm){
                 film.deleteLike(idUser);
+                return film;
             }
         }
+        throw new ExceptionHandler();
     }
 
-    public Collection<Film> show10PopularFilms(){
+    public Collection<Film> showPopularFilms(int count){
         films = filmStorage.getFilms();
-        //films.stream().sorted()
-        return null;
+        List<Film> filmsList = new ArrayList();
+        filmsList.addAll(films);
+        Collections.sort(filmsList);
+        return filmsList.subList(0, count);
     }
 }
