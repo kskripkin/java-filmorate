@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.ExceptionHandler;
+import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
+import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryFilmStorage;
@@ -23,7 +25,10 @@ public class FilmService {
      */
     private Collection<Film> films;
 
-    public Film addLike(int idFilm, int idUser){
+    public Film addLike(Integer idFilm, Integer idUser){
+        if(idFilm == null || idUser == null){
+            throw new ValidationException("User id or film id = null");
+        }
         films = filmStorage.getFilms();
         for (Film film : films){
             if (film.getId() == idFilm){
@@ -31,10 +36,15 @@ public class FilmService {
                 return film;
             }
         }
-        throw new ExceptionHandler();
+        throw new FilmNotFoundException(String.format(
+                "Film with id %s not found",
+                idFilm));
     }
 
-    public Film deleteLike(int idFilm, int idUser){
+    public Film deleteLike(Integer idFilm, Integer idUser){
+        if(idFilm == null || idUser == null){
+            throw new ValidationException("User id or film id = null");
+        }
         films = filmStorage.getFilms();
         for (Film film : films){
             if (film.getId() == idFilm){
@@ -42,7 +52,9 @@ public class FilmService {
                 return film;
             }
         }
-        throw new ExceptionHandler();
+        throw new FilmNotFoundException(String.format(
+                "Film with id %s not found",
+                idFilm));
     }
 
     public Collection<Film> showPopularFilms(int count){
@@ -50,6 +62,9 @@ public class FilmService {
         List<Film> filmsList = new ArrayList();
         filmsList.addAll(films);
         Collections.sort(filmsList);
+        if ((count < filmsList.size())){
+            count = filmsList.size();
+        }
         return filmsList.subList(0, count);
     }
 }
