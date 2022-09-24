@@ -17,7 +17,7 @@ import java.util.*;
 public class FilmService {
 
     private FilmStorage filmStorage = new InMemoryFilmStorage();
-    private UserStorage userStorage = new InMemoryUserStorage();
+ //   private UserStorage userStorage = new InMemoryUserStorage();
 
     /*
     Создайте FilmService, который будет отвечать за операции с фильмами, — добавление и удаление лайка,
@@ -63,7 +63,7 @@ public class FilmService {
         List<Film> filmsList = new ArrayList();
         filmsList.addAll(films);
         Collections.sort(filmsList);
-        if ((count < filmsList.size())){
+        if ((count > filmsList.size())){
             count = filmsList.size();
         }
         return filmsList.subList(0, count);
