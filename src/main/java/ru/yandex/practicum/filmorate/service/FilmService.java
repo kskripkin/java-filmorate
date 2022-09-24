@@ -5,6 +5,7 @@ import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryUserStorage;
@@ -66,5 +67,20 @@ public class FilmService {
             count = filmsList.size();
         }
         return filmsList.subList(0, count);
+    }
+
+    public Film getFilm(Integer id){
+        if(id == null){
+            throw new ValidationException("Film id = null");
+        }
+        films = filmStorage.getFilms();
+        for (Film film : films){
+            if(film.getId() == id){
+                return film;
+            }
+        }
+        throw new FilmNotFoundException(String.format(
+                "Film with id = %s not found",
+                id));
     }
 }
