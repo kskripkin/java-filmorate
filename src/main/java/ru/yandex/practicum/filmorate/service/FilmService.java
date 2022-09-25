@@ -28,7 +28,7 @@ public class FilmService {
         if(!films.containsKey(idFilm)){
             throw new FilmNotFoundException("Film not found");
         }
-        if(userStorage.getUsers().contains(idUser)){
+        if(!userStorage.getUsers().contains(idUser)){
             throw new UserNotFoundException("User not found");
         }
         films.get(idFilm).setLike(idUser);
@@ -43,7 +43,7 @@ public class FilmService {
         if(!films.containsKey(idFilm)){
             throw new FilmNotFoundException("Film not found");
         }
-        if(userStorage.getUsers().contains(idUser)){
+        if(!userStorage.getUsers().contains(idUser)){
             throw new UserNotFoundException("User not found");
         }
         films.get(idFilm).deleteLike(idUser);
