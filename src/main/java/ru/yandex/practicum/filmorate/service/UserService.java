@@ -80,7 +80,7 @@ public class UserService {
         }
         Set<Long> friendsFirstUser = users.get(idFirstUser).getFriends();
         Set<Long> friendsSecondUser = users.get(idSecondUser).getFriends();
-        Set<Long> joinListFriends = null;
+        Set<Long> joinListFriends = new HashSet<>();
         Set<User> finalListUser = new HashSet<>();
         for (Long idFirst : friendsFirstUser){
             for (Long idSecond : friendsSecondUser){
@@ -89,7 +89,7 @@ public class UserService {
                 }
             }
         }
-        if(joinListFriends == null){
+        if(joinListFriends.size() == 0){
             return finalListUser;
         }
         for (Long idUser : joinListFriends){
