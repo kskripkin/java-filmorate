@@ -7,8 +7,6 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage.UserStorage;
 
 import java.util.*;
 
@@ -16,7 +14,6 @@ import java.util.*;
 public class FilmService {
 
     private FilmStorage filmStorage = new InMemoryFilmStorage();
-    private UserStorage userStorage = new InMemoryUserStorage();
 
     private Map<Integer,Film> films;
 
@@ -27,9 +24,6 @@ public class FilmService {
         films = filmStorage.getFilmSourceMap();
         if(!films.containsKey(idFilm)){
             throw new FilmNotFoundException("Film not found");
-        }
-        if(!userStorage.getUsers().contains(idUser)){
-            throw new UserNotFoundException("User not found");
         }
         films.get(idFilm).setLike(idUser);
         return films.get(idFilm);
@@ -43,7 +37,7 @@ public class FilmService {
         if(!films.containsKey(idFilm)){
             throw new FilmNotFoundException("Film not found");
         }
-        if(!userStorage.getUsers().contains(idUser)){
+        if(!films.get(idFilm).getLikes().contains(idUser)){
             throw new UserNotFoundException("User not found");
         }
         films.get(idFilm).deleteLike(idUser);
