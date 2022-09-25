@@ -36,6 +36,9 @@ public class FilmService {
         if(!films.containsKey(idFilm)){
             throw new FilmNotFoundException("Film not found");
         }
+        if(!films.get(idFilm).getLikes().contains(idUser)){
+            throw new FilmNotFoundException("Like not found");
+        }
         films.get(idFilm).deleteLike(idUser);
         return films.get(idFilm);
     }
