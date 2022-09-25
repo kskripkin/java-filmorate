@@ -3,11 +3,17 @@ package ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface FilmStorage {
 
     /**
-     * @return набор фильмов
+     * @return набор фильмов внутри исходной мапы
+     */
+    Map<Integer, Film> getFilmSourceMap();
+
+    /**
+     * @return набор фильмов для отдачи его клиенту
      */
     Collection<Film> getFilms();
 

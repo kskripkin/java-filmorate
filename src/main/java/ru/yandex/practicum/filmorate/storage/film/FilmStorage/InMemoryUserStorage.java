@@ -18,6 +18,10 @@ public class InMemoryUserStorage implements UserStorage{
     private final static Map<Integer, User> users = new HashMap();
     private int id = 1;
 
+    public Map<Integer, User> getUserSourceMap(){
+        return users;
+    }
+
     public Collection<User> getUsers(){
         return users.values();
     }

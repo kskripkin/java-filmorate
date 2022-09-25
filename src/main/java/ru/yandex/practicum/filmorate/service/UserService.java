@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryUserStorag
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.UserStorage;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -15,66 +16,49 @@ public class UserService {
 
     private UserStorage userStorage = new InMemoryUserStorage();
 
-    private Collection<User> users;
+    private Map<Integer, User> users;
 
     public void addFriend(Integer idFirst, Integer idSecond){
         if(idFirst == null || idSecond == null){
-            throw new ValidationException("User id = null");
+            throw new ValidationException("User with idFirst = null or idSecond = null");
         }
-        users = userStorage.getUsers();
-        for (User user : users) {
-            if (user.getId() == idFirst){
-                user.setFriend(idSecond);
-                userStorage.updateUser(user);
-            } else if (user.getId() == idSecond){
-                user.setFriend(idFirst);
-                userStorage.updateUser(user);
-            }
+        users = userStorage.getUserSourceMap();
+        if(!users.containsKey(idFirst) || !users.containsKey(idSecond)){
+            throw new UserNotFoundException("First or second user not found");
         }
-        throw new UserNotFoundException(String.format(
-                "User with id = %s or id = %s not found",
-                idFirst, idSecond));
+        users.get(idFirst).setFriend(idSecond);
+        users.get(idSecond).setFriend(idFirst);
     }
 
     public void deleteFriend(Integer idUser, Integer idDeleteFriend){
         if(idUser == null || idDeleteFriend == null){
-            throw new ValidationException("User id = null");
+            throw new ValidationException("User with idFirst = null or idSecond = null");
         }
-        users = userStorage.getUsers();
-        for (User user : users){
-            if (user.getId() == idUser){
-                user.deleteFriend(idDeleteFriend);
-                userStorage.updateUser(user);
-            } else if (user.getId() == idDeleteFriend){
-                user.deleteFriend(idUser);
-                userStorage.updateUser(user);
-            }
+        users = userStorage.getUserSourceMap();
+        if(!users.containsKey(idUser) || !users.containsKey(idDeleteFriend)){
+            throw new UserNotFoundException("First or second user not found");
         }
-        throw new UserNotFoundException(String.format(
-                "User with id = %s or id = %s not found",
-                idUser, idDeleteFriend));
+        users.get(idUser).deleteFriend(idDeleteFriend);
+        users.get(idDeleteFriend).deleteFriend(idUser);
     }
 
     public Collection<User> showListFriends(Integer id){
         if(id == null){
             throw new ValidationException("User id = null");
         }
-        users = userStorage.getUsers();
-        Set<Long> idFriends = null;
+        users = userStorage.getUserSourceMap();
+        if(!users.containsKey(id)){
+            throw new UserNotFoundException("User not found");
+        }
+        Set<Long> idFriends = users.get(id).getFriends();
         Set<User> listUsers = null;
-        for (User user : users){
-            if (user.getId() == id){
-                idFriends = user.getFriends();
-            }
+        if (idFriends.size() == 0){
+            return null;
         }
-        if (idFriends == null){
-            throw new UserNotFoundException(String.format(
-                    "User with id = %s not found", id));
-        }
-        for (User user : users){
+        for (Map.Entry<Integer, User> entry: users.entrySet()){
             for (Long idFriend : idFriends){
-                if(user.getId() == idFriend){
-                    listUsers.add(user);
+                if(entry.getValue().getId() == idFriend){
+                    listUsers.add(entry.getValue());
                 }
             }
         }
@@ -83,22 +67,16 @@ public class UserService {
 
     public Collection<User> showJoinListFriends(Integer idFirstUser, Integer idSecondUser){
         if(idFirstUser == null || idSecondUser == null){
-            throw new ValidationException("User id = null");
+            throw new ValidationException("User with idFirst = null or idSecond = null");
         }
-        users = userStorage.getUsers();
-        Set<Long> friendsFirstUser = null;
-        Set<Long> friendsSecondUser = null;
+        users = userStorage.getUserSourceMap();
+        if(!users.containsKey(idFirstUser) || !users.containsKey(idSecondUser)){
+            throw new UserNotFoundException("First or second user not found");
+        }
+        Set<Long> friendsFirstUser = users.get(idFirstUser).getFriends();
+        Set<Long> friendsSecondUser = users.get(idSecondUser).getFriends();
         Set<Long> joinListFriends = null;
         Set<User> finalListUser = null;
-
-        for (User user : users){
-            if (user.getId() == idFirstUser){
-                friendsFirstUser = user.getFriends();
-            } else if (user.getId() == idSecondUser){
-                friendsSecondUser = user.getFriends();
-            }
-        }
-
         for (Long idFirst : friendsFirstUser){
             for (Long idSecond : friendsSecondUser){
                 if (idFirst == idSecond){
@@ -106,15 +84,13 @@ public class UserService {
                 }
             }
         }
-
         for (Long idUser : joinListFriends){
-            for (User user : users){
-                if (idUser == user.getId()){
-                    finalListUser.add(user);
+            for (Map.Entry<Integer, User> entry : users.entrySet()){
+                if (idUser == entry.getValue().getId()){
+                    finalListUser.add(entry.getValue());
                 }
             }
         }
-
         return finalListUser;
     }
 
@@ -122,16 +98,10 @@ public class UserService {
         if(id == null){
             throw new ValidationException("User id = null");
         }
-        users = userStorage.getUsers();
-        for (User user : users){
-            if(user.getId() == id){
-                return user;
-            }
+        users = userStorage.getUserSourceMap();
+        if (!users.containsKey(id)){
+            throw new UserNotFoundException("User not found");
         }
-        throw new UserNotFoundException(String.format(
-                "User with id = %s not found",
-                id));
+        return users.get(id);
     }
-
-
 }
