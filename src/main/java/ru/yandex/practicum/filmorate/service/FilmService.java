@@ -30,15 +30,12 @@ public class FilmService {
     }
 
     public Film deleteLike(Integer idFilm, Integer idUser){
-        if(idFilm == null || idUser == null){
-            throw new ValidationException("User id or film id = null");
+        if(idFilm == null || idUser == null || idUser < 0){
+            throw new ValidationException("Validation exception id film or user id");
         }
         films = filmStorage.getFilmSourceMap();
         if(!films.containsKey(idFilm)){
             throw new FilmNotFoundException("Film not found");
-        }
-        if(!films.get(idFilm).getLikes().contains(idUser)){
-            throw new UserNotFoundException("User not found");
         }
         films.get(idFilm).deleteLike(idUser);
         return films.get(idFilm);
