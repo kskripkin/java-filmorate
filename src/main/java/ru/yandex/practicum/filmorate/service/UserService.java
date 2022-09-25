@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -8,9 +9,11 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryUserStorag
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.UserStorage;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -51,9 +54,9 @@ public class UserService {
             throw new UserNotFoundException("User not found");
         }
         Set<Long> idFriends = users.get(id).getFriends();
-        Set<User> listUsers = null;
+        Set<User> listUsers = new HashSet<>();
         if (idFriends.size() == 0){
-            return null;
+            return listUsers;
         }
         for (Map.Entry<Integer, User> entry: users.entrySet()){
             for (Long idFriend : idFriends){
@@ -76,7 +79,7 @@ public class UserService {
         Set<Long> friendsFirstUser = users.get(idFirstUser).getFriends();
         Set<Long> friendsSecondUser = users.get(idSecondUser).getFriends();
         Set<Long> joinListFriends = null;
-        Set<User> finalListUser = null;
+        Set<User> finalListUser = new HashSet<>();
         for (Long idFirst : friendsFirstUser){
             for (Long idSecond : friendsSecondUser){
                 if (idFirst == idSecond){
@@ -85,7 +88,8 @@ public class UserService {
             }
         }
         if(joinListFriends == null){
-            return null;
+            log.debug("DD {}", finalListUser);
+            return finalListUser;
         }
         for (Long idUser : joinListFriends){
             for (Map.Entry<Integer, User> entry : users.entrySet()){
