@@ -84,6 +84,9 @@ public class UserService {
                 }
             }
         }
+        if(joinListFriends == null){
+            return null;
+        }
         for (Long idUser : joinListFriends){
             for (Map.Entry<Integer, User> entry : users.entrySet()){
                 if (idUser == entry.getValue().getId()){
