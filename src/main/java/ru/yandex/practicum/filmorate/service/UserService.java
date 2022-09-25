@@ -21,7 +21,7 @@ public class UserService {
 
     private Map<Integer, User> users;
 
-    public void addFriend(Integer idFirst, Integer idSecond){
+    public User addFriend(Integer idFirst, Integer idSecond){
         if(idFirst == null || idSecond == null){
             throw new ValidationException("User with idFirst = null or idSecond = null");
         }
@@ -31,9 +31,10 @@ public class UserService {
         }
         users.get(idFirst).setFriend(idSecond);
         users.get(idSecond).setFriend(idFirst);
+        return users.get(idFirst);
     }
 
-    public void deleteFriend(Integer idUser, Integer idDeleteFriend){
+    public User deleteFriend(Integer idUser, Integer idDeleteFriend){
         if(idUser == null || idDeleteFriend == null){
             throw new ValidationException("User with idFirst = null or idSecond = null");
         }
@@ -43,6 +44,7 @@ public class UserService {
         }
         users.get(idUser).deleteFriend(idDeleteFriend);
         users.get(idDeleteFriend).deleteFriend(idUser);
+        return users.get(idUser);
     }
 
     public Collection<User> showListFriends(Integer id){
@@ -88,7 +90,6 @@ public class UserService {
             }
         }
         if(joinListFriends == null){
-            log.debug("DD {}", finalListUser);
             return finalListUser;
         }
         for (Long idUser : joinListFriends){
