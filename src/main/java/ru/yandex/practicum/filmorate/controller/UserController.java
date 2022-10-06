@@ -1,52 +1,67 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.validate.Validate;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage.UserStorage;
 
 import java.util.*;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
-    private final Map<Integer, User> users = new HashMap();
-    private int id = 1;
+    private final UserStorage userStorage;
+    private final UserService userService;
 
     @GetMapping("/users")
     public Collection<User> getUsers(){
-        return users.values();
+        log.info("GET /users");
+        return userStorage.getUsers();
     }
 
     @PostMapping("/users")
     public User createUser(@RequestBody User user){
-        if(Validate.isValidUser(user)) {
-            if(user.getName() == null){
-                user.setName(user.getLogin());
-            }
-            if(user.getId() == 0){
-                user.setId(id++);
-            }
-            users.put(user.getId(), user);
-            log.info("Добавлен пользователь: {}", user.toString());
-            return user;
-        } else {
-                log.error("Ошибка входящих данных. Проверьте переданные данные.");
-                throw new ValidationException("Ошибка входящих данных. Проверьте переданные данные.");
-        }
+        log.info("POST /users");
+        return userStorage.createUser(user);
     }
 
     @PutMapping("/users")
     public User updateUser(@RequestBody User user){
-        if(users.containsKey(user.getId())) {
-            users.put(user.getId(), user);
-            log.info("Обновлен пользователь: {}", user.toString());
-        } else {
-            log.error("Id user not found");
-            throw new ValidationException("Id user not found");
-        }
-        return user;
+        log.info("PUT /users");
+        return userStorage.updateUser(user);
+    }
+
+    @GetMapping("/users/{id}")
+    public User getUser(@PathVariable int id){
+        log.info("GET /users/{id}");
+        return userService.getUser(id);
+    }
+
+    @PutMapping("/users/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable int id, @PathVariable int friendId){
+        log.info("PUT /users/{id}/friends/{friendId}");
+        return userService.addFriend(id, friendId);
+    }
+
+    @DeleteMapping("/users/{id}/friends/{friendId}")
+    public User deleteFriend(@PathVariable int id, @PathVariable int friendId){
+        log.info("DELETE /users/{id}/friends/{friendId}");
+        return userService.deleteFriend(id, friendId);
+    }
+
+    @GetMapping("/users/{id}/friends")
+    public Collection<User> getFriends(@PathVariable int id){
+        log.info("GET /users/{id}/friends");
+        return userService.showListFriends(id);
+    }
+
+    @GetMapping("/users/{id}/friends/common/{otherId}")
+    public Collection<User> getJoinListFriends(@PathVariable int id, @PathVariable int otherId){
+        log.info("GET /users/{id}/friends/common/{otherId}");
+        return userService.showJoinListFriends(id, otherId);
     }
 }

@@ -4,6 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage.UserStorage;
 
 import java.time.LocalDate;
 
@@ -13,10 +18,16 @@ class FilmControllerTest {
 
     private FilmController filmController;
     private Film film;
+    private FilmStorage filmStorage;
+    private FilmService filmService;
+    private UserStorage userStorage;
 
     @BeforeEach
     public void BeforeEach(){
-        filmController = new FilmController();
+        userStorage = new InMemoryUserStorage();
+        filmStorage = new InMemoryFilmStorage();
+        filmService = new FilmService(filmStorage, userStorage);
+        filmController = new FilmController(filmStorage, filmService);
         film = new Film();
         film.setName("Терминатор");
         film.setDescription("Фильм про восстание машин");
