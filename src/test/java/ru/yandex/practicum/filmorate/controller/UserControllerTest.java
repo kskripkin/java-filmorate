@@ -25,7 +25,7 @@ class UserControllerTest {
         userStorage = new InMemoryUserStorage();
         userService = new UserService(userStorage);
         userController = new UserController(userStorage, userService);
-        user = new User();
+        //user = new User();
         user.setName("Вася");
         user.setId(1);
         user.setLogin("Vasja123");
