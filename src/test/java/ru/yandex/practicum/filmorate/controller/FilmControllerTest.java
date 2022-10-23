@@ -27,7 +27,7 @@ class FilmControllerTest {
         userStorage = new InMemoryUserStorage();
         filmStorage = new InMemoryFilmStorage();
         filmService = new FilmService(filmStorage, userStorage);
-        filmController = new FilmController(filmStorage, filmService);
+        filmController = new FilmController(filmService);
         //film = new Film();
         film.setName("Терминатор");
         film.setDescription("Фильм про восстание машин");

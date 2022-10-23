@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Map;
 
 @Slf4j
 @Qualifier
@@ -19,11 +18,6 @@ public class FilmDbStorage implements FilmStorage{
 
     public FilmDbStorage(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate=jdbcTemplate;
-    }
-
-    @Override
-    public Map<Integer, Film> getFilmSourceMap() {
-        return null;
     }
 
     @Override
@@ -74,28 +68,32 @@ public class FilmDbStorage implements FilmStorage{
         return this.getFilm(film.getId());
     }
 
-    public Film getFilm(int id){
+    @Override
+    public Film getFilm(Integer id){
         String sqlQuery = "select * from films where film_id = ?";
         return jdbcTemplate.queryForObject(sqlQuery, (rs, rowNum) -> makeFilm(rs), id);
     }
 
-    public void likeFilm(int filmid, int userId){
+    @Override
+    public void likeFilm(Integer filmId, Integer userId){
         String sqlQuery = "insert into likes(film_id, user_id) " +
                             "values(?, ?)";
         jdbcTemplate.update(sqlQuery,
-                filmid,
+                filmId,
                 userId
         );
     }
 
-    public void deleteLike(int filmid, int userId){
+    @Override
+    public void deleteLike(Integer filmId, Integer userId){
         String sqlQuery = "delete from likes where film_id = ? and user_id = ?";
         jdbcTemplate.update(sqlQuery,
-                filmid,
+                filmId,
                 userId
         );
     }
 
+    @Override
     public Collection<Film> getTopFilms(Integer count){
         String sqlQuery = "select f.* from films as f " +
                 "join likes as lk on f.film_id = lk.film_id " +

@@ -28,4 +28,14 @@ public interface UserStorage {
      * @return
      */
     User updateUser(User user);
+
+    User getUser(Integer id);
+
+    void addFriend(Integer id, Integer friendId);
+
+    void deleteFriend(Integer id, Integer friendId);
+
+    Collection<User> getFriends(int id);
+
+    Collection<User> getJoinListFriends(int id, int otherId);
 }

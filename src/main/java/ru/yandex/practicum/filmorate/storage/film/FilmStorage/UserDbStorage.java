@@ -69,12 +69,14 @@ public class UserDbStorage implements UserStorage{
         return jdbcTemplate.queryForObject(sqlQuery, (rs, rowNum) -> makeUser(rs), user.getId());
     }
 
-    public User getUser(int id){
+    @Override
+    public User getUser(Integer id){
         String sqlQuery = "select * from users where user_id = ?";
         return jdbcTemplate.queryForObject(sqlQuery, (rs, rowNum) -> makeUser(rs), id);
     }
 
-    public void addFriend(int id, int friendId){
+    @Override
+    public void addFriend(Integer id, Integer friendId){
         String sqlQuery = "insert into friends(user_id, friend_id) " +
                 "values (?, ?)";
         jdbcTemplate.update(sqlQuery,
@@ -89,7 +91,8 @@ public class UserDbStorage implements UserStorage{
         );
     }
 
-    public void deleteFriend(int id, int friendId){
+    @Override
+    public void deleteFriend(Integer id, Integer friendId){
         String sqlQuery = "delete from friends where user_id = ? and friend_id = ?";
         jdbcTemplate.update(sqlQuery,
                 id,
@@ -102,17 +105,16 @@ public class UserDbStorage implements UserStorage{
         );
     }
 
+    @Override
     public Collection<User> getFriends(int id){
         String sqlQuery = "select friend_id from friends as fr " +
                             "join users as us on fr.friend_id = us.user_id " +
                             "where fr.user_id = ?";
-//        jdbcTemplate.update(sqlQuery,
-//                id
-//        );
         return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> makeUser(rs), id);
     }
 
-    public Collection<User> getJoinListFriends(int id, int otherId) {
+    @Override
+    public Collection<User> getJoinListFriends(int id, int otherId){
         String sqlQuery = "select * from users " +
                 "where user_id in (select friend_id from friends as fr1 " +
                 "join friends as fr2 on fr1.friend_id = fr2.friend_id " +

@@ -24,7 +24,7 @@ class UserControllerTest {
     public void BeforeEach(){
         userStorage = new InMemoryUserStorage();
         userService = new UserService(userStorage);
-        userController = new UserController(userStorage, userService);
+        userController = new UserController(userService);
         //user = new User();
         user.setName("Вася");
         user.setId(1);

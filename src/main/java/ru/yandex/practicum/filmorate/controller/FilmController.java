@@ -11,28 +11,32 @@ import java.util.*;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class FilmController {
 
-    private final FilmStorage filmStorage;
+//    private final FilmStorage filmStorage;
     private final FilmService filmService;
+
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
 
     @GetMapping("/films")
     public Collection<Film> getFilms(){
         log.info("GET /films");
-        return filmStorage.getFilms();
+        return filmService.getFilms();
     }
 
     @PostMapping("/films")
     public Film addFilm(@RequestBody Film film){
         log.info("POST /films");
-        return filmStorage.addFilm(film);
+        return filmService.addFilm(film);
     }
 
     @PutMapping("/films")
     public Film updateFilm(@RequestBody Film film){
         log.info("PUT /films");
-        return filmStorage.updateFilm(film);
+        return filmService.updateFilm(film);
     }
 
     @GetMapping("/films/{id}")

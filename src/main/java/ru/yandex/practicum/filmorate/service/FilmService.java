@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
@@ -12,63 +11,71 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage.UserStorage;
 import java.util.*;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class FilmService {
 
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
 
-    private Map<Integer,Film> films;
+    public FilmService(FilmStorage filmStorage, UserStorage userStorage){
+        this.filmStorage = filmStorage;
+        this.userStorage = userStorage;
+    }
 
     public Film addLike(Integer idFilm, Integer idUser){
         if(idFilm == null || idUser == null){
             throw new ValidationException("User id or film id = null");
         }
-        films = filmStorage.getFilmSourceMap();
-        if(!films.containsKey(idFilm)){
+        if(filmStorage.getFilm(idFilm) == null){
             throw new FilmNotFoundException("Film not found");
         }
-        if(!userStorage.getUserSourceMap().containsKey(idUser)){
+        if(userStorage.getUser(idUser) == null){
             throw new UserNotFoundException("User not found");
         }
-        films.get(idFilm).setLike(idUser);
-        return films.get(idFilm);
+        filmStorage.likeFilm(idFilm, idUser);
+        return filmStorage.getFilm(idFilm);
     }
 
     public Film deleteLike(Integer idFilm, Integer idUser){
         if(idFilm == null || idUser == null){
             throw new ValidationException("User id or film id = null");
         }
-        films = filmStorage.getFilmSourceMap();
-        if(!films.containsKey(idFilm)){
+        if(filmStorage.getFilm(idFilm) == null){
             throw new FilmNotFoundException("Film not found");
         }
-        if(!userStorage.getUserSourceMap().containsKey(idUser)){
+        if(userStorage.getUser(idUser) == null){
             throw new UserNotFoundException("User not found");
         }
-        films.get(idFilm).deleteLike(idUser);
-        return films.get(idFilm);
+        filmStorage.deleteLike(idFilm, idUser);
+        return filmStorage.getFilm(idFilm);
     }
 
     public Collection<Film> showPopularFilms(int count){
-        films = filmStorage.getFilmSourceMap();
-        List<Film> filmsList = new ArrayList();
-        filmsList.addAll(films.values());
-        Collections.sort(filmsList);
-        if ((count > filmsList.size())){
-            count = filmsList.size();
-        }
-        return filmsList.subList(0, count);
+        return filmStorage.getTopFilms(count);
     }
 
     public Film getFilm(Integer idFilm){
         if(idFilm == null){
             throw new ValidationException("Film id = null");
         }
-        films = filmStorage.getFilmSourceMap();
-        if(!films.containsKey(idFilm)){
+        if(filmStorage.getFilm(idFilm) == null){
             throw new FilmNotFoundException("Film not found");
         }
-        return films.get(idFilm);
+        return filmStorage.getFilm(idFilm);
+    }
+
+    public Collection<Film> getFilms(){
+        return filmStorage.getFilms();
+    }
+
+    public Film addFilm(Film film){
+        return filmStorage.addFilm(film);
+    }
+
+    public Film updateFilm(Film film){
+        if(filmStorage.getFilm(film.getId()) == null){
+            throw new FilmNotFoundException("Film not found");
+        }
+        return filmStorage.updateFilm(film);
     }
 }

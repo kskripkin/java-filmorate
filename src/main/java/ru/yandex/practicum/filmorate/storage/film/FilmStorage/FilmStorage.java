@@ -3,14 +3,8 @@ package ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
-import java.util.Map;
 
 public interface FilmStorage {
-
-    /**
-     * @return набор фильмов внутри исходной мапы
-     */
-    Map<Integer, Film> getFilmSourceMap();
 
     /**
      * @return набор фильмов для отдачи его клиенту
@@ -28,4 +22,12 @@ public interface FilmStorage {
      * @return
      */
     Film updateFilm(Film film);
+
+    void likeFilm(Integer filmId, Integer userId);
+
+    void deleteLike(Integer filmId, Integer userId);
+
+    Collection<Film> getTopFilms(Integer count);
+
+    Film getFilm(Integer id);
 }

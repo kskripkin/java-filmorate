@@ -18,9 +18,9 @@ public class InMemoryFilmStorage implements FilmStorage{
     private final static Map<Integer, Film> films = new HashMap<>();
     private int id = 1;
 
-    public Map<Integer, Film> getFilmSourceMap(){
-        return films;
-    }
+//    public Map<Integer, Film> getFilmSourceMap(){
+//        return films;
+//    }
 
     public Collection<Film> getFilms(){
         return films.values();
@@ -49,5 +49,26 @@ public class InMemoryFilmStorage implements FilmStorage{
             throw new FilmNotFoundException("Id film not found");
         }
         return film;
+    }
+
+    @Override
+    public void likeFilm(Integer filmId, Integer userId) {
+
+    }
+
+    @Override
+    public void deleteLike(Integer filmId, Integer userId) {
+
+    }
+
+
+    @Override
+    public Collection<Film> getTopFilms(Integer count) {
+        return null;
+    }
+
+    @Override
+    public Film getFilm(Integer id) {
+        return null;
     }
 }
