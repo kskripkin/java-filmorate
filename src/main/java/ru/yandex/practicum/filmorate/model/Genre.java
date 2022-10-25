@@ -8,10 +8,4 @@ import lombok.Data;
 public class Genre {
     private int genre_id;
     private String category;
-    /*COMEDY,
-    DRAMA,
-    CARTOON,
-    THRILLER,
-    DOCUMENTARY,
-    ACTION_MOVIE*/
 }

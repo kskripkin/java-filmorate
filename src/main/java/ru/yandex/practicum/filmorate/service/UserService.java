@@ -12,7 +12,6 @@ import java.util.Collection;
 
 @Slf4j
 @Service
-//@RequiredArgsConstructor
 public class UserService {
 
     private final UserStorage userStorage;
@@ -82,11 +81,11 @@ public class UserService {
             if(user.getName() == null || user.getName() == ""){
                 user.setName(user.getLogin());
             }
-            log.info("Добавлен пользователь: {}", user.toString());
+            log.info("User added: {}", user.toString());
             return userStorage.createUser(user);
         } else {
-            log.error("Ошибка входящих данных. Проверьте переданные данные.");
-            throw new ValidationException("Ошибка входящих данных. Проверьте переданные данные.");
+            log.error("Error input data. Check request");
+            throw new ValidationException("Error input data. Check request");
         }
 
     }

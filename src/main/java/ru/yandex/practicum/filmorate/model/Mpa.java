@@ -8,9 +8,4 @@ import lombok.Data;
 public class Mpa {
    private int ratingId;
    private String ratingName;
-    /*G,
-    PG,
-    PG_13,
-    R,
-    NC_17*/
 }

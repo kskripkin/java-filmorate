@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
@@ -17,7 +16,6 @@ import java.util.*;
 
 @Slf4j
 @Service
-//@RequiredArgsConstructor
 public class FilmService {
 
     private final FilmStorage filmStorage;
@@ -76,13 +74,12 @@ public class FilmService {
 
     public Film addFilm(Film film){
         if(Validate.isValidFilm(film)) {
-            log.debug("Добавлен фильм: {}", film.toString());
+            log.debug("Film added: {}", film.toString());
             return filmStorage.addFilm(film);
         } else {
-            log.error("Ошибка входящих данных. Проверьте переданные данные.");
-            throw new ValidationException("Ошибка входящих данных. Проверьте переданные данные.");
+            log.error("Error input data. Check request");
+            throw new ValidationException("Error input data. Check request");
         }
-
     }
 
     public Film updateFilm(Film film){
