@@ -1,9 +1,13 @@
 package ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -13,6 +17,8 @@ import java.util.Collection;
 public class UserDbStorage implements UserStorage{
 
     private final JdbcTemplate jdbcTemplate;
+
+    private KeyHolder keyHolder;
 
     public UserDbStorage(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate=jdbcTemplate;
@@ -37,13 +43,16 @@ public class UserDbStorage implements UserStorage{
     public User createUser(User user) {
         String sqlQuery = "insert into users(email, login, name, birthday) " +
                 "values (?, ?, ?, ?)";
-        jdbcTemplate.update(sqlQuery,
-                user.getEmail(),
-                user.getLogin(),
-                user.getName(),
-                user.getBirthday()
-        );
-        return user;
+        keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"user_id"});
+            stmt.setString(1, user.getEmail());
+            stmt.setString(2, user.getLogin());
+            stmt.setString(3, user.getName());
+            stmt.setDate(4, Date.valueOf(user.getBirthday()));
+            return stmt;
+        }, keyHolder);
+        return this.getUser(keyHolder.getKey().intValue());
     }
 
     @Override
@@ -51,14 +60,16 @@ public class UserDbStorage implements UserStorage{
         String sqlQuery = "update users set " +
                 "email = ?, login = ?, name = ?, birthday = ? " +
                 "where user_id = ?";
-        jdbcTemplate.update(sqlQuery,
-                user.getEmail(),
-                user.getLogin(),
-                user.getName(),
-                user.getBirthday(),
-                user.getId()
-        );
-        return this.getUser(user.getId());
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"user_id"});
+            stmt.setString(1, user.getEmail());
+            stmt.setString(2, user.getLogin());
+            stmt.setString(3, user.getName());
+            stmt.setDate(4, Date.valueOf(user.getBirthday()));
+            stmt.setInt(5, user.getId());
+            return stmt;
+        }, keyHolder);
+        return this.getUser(keyHolder.getKey().intValue());
     }
 
     @Override

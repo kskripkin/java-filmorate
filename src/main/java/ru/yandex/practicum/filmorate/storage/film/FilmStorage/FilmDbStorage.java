@@ -21,6 +21,8 @@ public class FilmDbStorage implements FilmStorage{
 
     private final JdbcTemplate jdbcTemplate;
 
+    private KeyHolder keyHolder;
+
     public FilmDbStorage(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate=jdbcTemplate;
     }
@@ -35,7 +37,7 @@ public class FilmDbStorage implements FilmStorage{
     public Film addFilm(Film film) {
         String sqlQuery = "insert into films(name, description, genre, release_date, duration, rating) " +
                 "values (?, ?, ?, ?, ?, ?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+        keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
                 PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"film_id"});
                 stmt.setString(1, film.getName());
@@ -54,16 +56,19 @@ public class FilmDbStorage implements FilmStorage{
         String sqlQuery = "update films set " +
                 "name = ?, description = ?, genre = ?, release_date = ?, duration = ?, rating = ? " +
                 "where film_id = ?";
-        jdbcTemplate.update(sqlQuery,
-                film.getName(),
-                film.getDescription(),
-                film.getGenre(),
-                film.getReleaseDate(),
-                film.getDuration(),
-                film.getRate(),
-                film.getId()
-        );
-        return this.getFilm(film.getId());
+        keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"film_id"});
+            stmt.setString(1, film.getName());
+            stmt.setString(2, film.getDescription());
+            stmt.setInt(3, film.getGenre());
+            stmt.setDate(4, Date.valueOf(film.getReleaseDate()));
+            stmt.setInt(5, film.getDuration());
+            stmt.setInt(6, film.getRate());
+            stmt.setInt(7, film.getId());
+            return stmt;
+        }, keyHolder);
+        return this.getFilm(keyHolder.getKey().intValue());
     }
 
     @Override
