@@ -93,12 +93,6 @@ public class UserDbStorage implements UserStorage{
                 id,
                 friendId
         );
-        sqlQuery = "insert into friends(friend_id, user_id) " +
-                "values (?, ?)";
-        jdbcTemplate.update(sqlQuery,
-                id,
-                friendId
-        );
     }
 
     @Override
@@ -107,11 +101,6 @@ public class UserDbStorage implements UserStorage{
         jdbcTemplate.update(sqlQuery,
                 id,
                 friendId
-        );
-        sqlQuery = "delete from friends where user_id = ? and friend_id = ?";
-        jdbcTemplate.update(sqlQuery,
-                friendId,
-                id
         );
     }
 
