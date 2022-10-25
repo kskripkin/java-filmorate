@@ -35,14 +35,6 @@ public class FilmDbStorage implements FilmStorage{
     public Film addFilm(Film film) {
         String sqlQuery = "insert into films(name, description, genre, release_date, duration, rating) " +
                 "values (?, ?, ?, ?, ?, ?)";
-//        jdbcTemplate.update(sqlQuery,
-//                film.getName(),
-//                film.getDescription(),
-//                film.getGenre(),
-//                film.getReleaseDate(),
-//                film.getDuration(),
-//                film.getRate()
-//        );
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
                 PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"film_id"});
