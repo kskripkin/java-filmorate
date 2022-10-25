@@ -43,7 +43,7 @@ public class UserServiceTest {
     @Transactional
     void getUserTest(){
         BeforeEach();
-        assertEquals(userService.getUser(14).toString(), "User(id=13, email=Vasja@yandex1.ru, login=Vasja1231, name=Вася1, birthday=2000-10-11)");
+        assertEquals(userService.getUser(14).toString(), "User(id=14, email=Vasja@yandex2.ru, login=Vasja1232, name=Вася2, birthday=2000-10-11)");
     }
 
     @Order(2)
@@ -60,8 +60,8 @@ public class UserServiceTest {
     @Transactional
     void updateUserTest(){
         BeforeEach();
-        userService.updateUser(new User(7, "petya@yandex.ru", "Vasja", "Вася", LocalDate.of(2000, 10, 11)));
-        assertEquals(userService.getUser(7).toString(), "User(id=7, email=petya@yandex.ru, login=Vasja, name=Вася, birthday=2000-10-11)");
+        userService.updateUser(new User(19, "petya@yandex.ru", "Vasja", "Вася", LocalDate.of(2000, 10, 11)));
+        assertEquals(userService.getUser(19).toString(), "User(id=19, email=petya@yandex.ru, login=Vasja, name=Вася, birthday=2000-10-11)");
     }
 
     @Order(4)
@@ -69,8 +69,8 @@ public class UserServiceTest {
     @Transactional
     void addFriendAndShowListFriendsTest(){
         BeforeEach();
-        userService.addFriend(10,11);
-        assertEquals(userService.showListFriends(10).toString(), "[User(id=11, email=Vasja@yandex2.ru, login=Vasja1232, name=Вася2, birthday=2000-10-11)]");
+        userService.addFriend(22,23);
+        assertEquals(userService.showListFriends(22).toString(), "[User(id=23, email=Vasja@yandex2.ru, login=Vasja1232, name=Вася2, birthday=2000-10-11)]");
     }
 
     @Order(5)
@@ -78,9 +78,9 @@ public class UserServiceTest {
     @Transactional
     void getJoinListFriendsTest(){
         BeforeEach();
-        userService.addFriend(13,14);
-        userService.addFriend(15,14);
-        assertEquals(userService.showJoinListFriends(13, 15).toString(), "[User(id=14, email=Vasja@yandex2.ru, login=Vasja1232, name=Вася2, birthday=2000-10-11)]");
+        userService.addFriend(25,26);
+        userService.addFriend(27,26);
+        assertEquals(userService.showJoinListFriends(25, 27).toString(), "[User(id=26, email=Vasja@yandex2.ru, login=Vasja1232, name=Вася2, birthday=2000-10-11)]");
     }
 
 }
