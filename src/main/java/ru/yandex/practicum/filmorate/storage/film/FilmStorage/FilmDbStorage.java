@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.model.User;
 
 
 import java.sql.Date;
@@ -74,7 +76,13 @@ public class FilmDbStorage implements FilmStorage{
     @Override
     public Film getFilm(Integer id){
         String sqlQuery = "select * from films where film_id = ?";
-        return jdbcTemplate.queryForObject(sqlQuery, (rs, rowNum) -> makeFilm(rs), id);
+        Film film;
+        try {
+            film = jdbcTemplate.queryForObject(sqlQuery, (rs, rowNum) -> makeFilm(rs), id);
+        }catch (EmptyResultDataAccessException e){
+            return null;
+        }
+        return film;
     }
 
     @Override

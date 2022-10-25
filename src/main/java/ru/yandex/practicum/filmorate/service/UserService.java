@@ -91,6 +91,9 @@ public class UserService {
     }
 
     public User updateUser(User user){
+        if(userStorage.getUser(user.getId()) == null){
+            throw new UserNotFoundException("User not found");
+        }
         return userStorage.updateUser(user);
     }
 }

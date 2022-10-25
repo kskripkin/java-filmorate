@@ -12,7 +12,6 @@ import java.util.*;
 
 @Slf4j
 @RestController
-@RequestMapping
 public class FilmController {
 
     private final FilmService filmService;
