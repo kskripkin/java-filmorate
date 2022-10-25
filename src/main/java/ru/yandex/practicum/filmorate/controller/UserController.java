@@ -9,6 +9,7 @@ import java.util.*;
 
 @Slf4j
 @RestController
+@RequestMapping
 public class UserController {
 
     private final UserService userService;
