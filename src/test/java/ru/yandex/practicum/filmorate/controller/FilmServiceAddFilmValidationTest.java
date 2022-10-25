@@ -25,7 +25,7 @@ class FilmServiceAddFilmValidationTest {
 
     @BeforeEach
     public void BeforeEach(){
-        Mpa mpa = new Mpa(1, "G");
+        Mpa mpa = new Mpa(1);
         film = new Film(1, "Терминатор", "Фильм про восстание машин", 1, LocalDate.of(2005, 12,11), 120, mpa);
     }
 

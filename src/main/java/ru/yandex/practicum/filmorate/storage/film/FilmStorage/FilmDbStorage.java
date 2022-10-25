@@ -47,7 +47,7 @@ public class FilmDbStorage implements FilmStorage{
                 stmt.setInt(3, film.getGenre());
                 stmt.setDate(4, Date.valueOf(film.getReleaseDate()));
                 stmt.setInt(5, film.getDuration());
-                stmt.setInt(6, film.getMpa().getRatingId());
+                stmt.setInt(6, film.getMpa().getId());
                 return stmt;
             }, keyHolder);
         return this.getFilm(keyHolder.getKey().intValue());
@@ -66,7 +66,7 @@ public class FilmDbStorage implements FilmStorage{
             stmt.setInt(3, film.getGenre());
             stmt.setDate(4, Date.valueOf(film.getReleaseDate()));
             stmt.setInt(5, film.getDuration());
-            stmt.setInt(6, film.getMpa().getRatingId());
+            stmt.setInt(6, film.getMpa().getId());
             stmt.setInt(7, film.getId());
             return stmt;
         }, keyHolder);
@@ -145,9 +145,8 @@ public class FilmDbStorage implements FilmStorage{
     }
 
     private Mpa makeMpa(ResultSet rs) throws SQLException{
-        Integer ratingId = rs.getInt("rating_id");
-        String ratingName = rs.getString("rating_name");
-        return new Mpa(ratingId, ratingName);
+        Integer id = rs.getInt("rating_id");
+        return new Mpa(id);
     }
 
     private Film makeFilm(ResultSet rs) throws SQLException {

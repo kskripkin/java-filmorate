@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS FILMS (
                                      film_id INTEGER PRIMARY KEY AUTO_INCREMENT,
                                      name VARCHAR(50) NOT NULL,
                                      description VARCHAR(200),
-                                     genre INTEGER REFERENCES GENRES (genre_id),
+                                     genre INTEGER,
                                      release_date DATE,
                                      duration INTEGER,
                                      rating INTEGER REFERENCES MPA (rating_id)

@@ -32,7 +32,7 @@ class FilmServiceTest {
     private final UserService userService;
 
     public void BeforeEach(){
-        Mpa mpa = new Mpa(1, "G");
+        Mpa mpa = new Mpa(1);
         film = new Film("Терминатор", "Фильм про восстание машин", 1, LocalDate.of(2005, 12,11), 121, mpa);
         film1 = new Film("Терминатор2", "Фильм про восстание машин", 2, LocalDate.of(2005, 12,11), 122, mpa);
         film2 = new Film("Терминатор3", "Фильм про восстание машин", 3, LocalDate.of(2005, 12,11), 123, mpa);
@@ -52,8 +52,8 @@ class FilmServiceTest {
     @Transactional
     void addAndDeleteLikeTest(){
         BeforeEach();
-        assertEquals(filmService.addLike(1, 1).toString(), "Film(id=1, name=Терминатор, description=Фильм про восстание машин, genre=1, releaseDate=2005-12-11, duration=121, mpa=Mpa(ratingId=1, ratingName=G))");
-        assertEquals(filmService.deleteLike(1, 1).toString(), "Film(id=1, name=Терминатор, description=Фильм про восстание машин, genre=1, releaseDate=2005-12-11, duration=121, mpa=Mpa(ratingId=1, ratingName=G))");
+        assertEquals(filmService.addLike(1, 1).toString(), "Film(id=1, name=Терминатор, description=Фильм про восстание машин, genre=1, releaseDate=2005-12-11, duration=121, mpa=Mpa(id=1))");
+        assertEquals(filmService.deleteLike(1, 1).toString(), "Film(id=1, name=Терминатор, description=Фильм про восстание машин, genre=1, releaseDate=2005-12-11, duration=121, mpa=Mpa(id=1))");
     }
 
     @Order(2)
@@ -61,7 +61,7 @@ class FilmServiceTest {
     @Transactional
     void addAndGetFilmTest(){
         BeforeEach();
-        assertEquals(filmService.getFilm(4).toString(), "Film(id=4, name=Терминатор, description=Фильм про восстание машин, genre=1, releaseDate=2005-12-11, duration=121, mpa=Mpa(ratingId=1, ratingName=G))");
+        assertEquals(filmService.getFilm(4).toString(), "Film(id=4, name=Терминатор, description=Фильм про восстание машин, genre=1, releaseDate=2005-12-11, duration=121, mpa=Mpa(id=1))");
     }
 
     @Order(3)
@@ -69,9 +69,9 @@ class FilmServiceTest {
     @Transactional
     void updateFilmTest(){
         BeforeEach();
-        Mpa mpa = new Mpa(1, "G");
+        Mpa mpa = new Mpa(1);
         filmService.updateFilm(new Film(7,"Титаник", "Фильм про восстание машин", 1, LocalDate.of(2005, 12,11), 121, mpa));
-        assertEquals(filmService.getFilm(7).toString(), "Film(id=7, name=Титаник, description=Фильм про восстание машин, genre=1, releaseDate=2005-12-11, duration=121, mpa=Mpa(ratingId=1, ratingName=G))");
+        assertEquals(filmService.getFilm(7).toString(), "Film(id=7, name=Титаник, description=Фильм про восстание машин, genre=1, releaseDate=2005-12-11, duration=121, mpa=Mpa(id=1))");
     }
 
     @Order(4)
@@ -83,34 +83,34 @@ class FilmServiceTest {
         filmService.addLike(12, 11);
         filmService.addLike(12, 12);
 
-        assertEquals(filmService.showPopularFilms(3).toString(), "[Film(id=12, name=Терминатор3, description=Фильм про восстание машин, genre=3, releaseDate=2005-12-11, duration=123, mpa=Mpa(ratingId=1, ratingName=G)), Film(id=10, name=Терминатор, description=Фильм про восстание машин, genre=1, releaseDate=2005-12-11, duration=121, mpa=Mpa(ratingId=1, ratingName=G))]");
+        assertEquals(filmService.showPopularFilms(3).toString(), "[Film(id=12, name=Терминатор3, description=Фильм про восстание машин, genre=3, releaseDate=2005-12-11, duration=123, mpa=Mpa(id=1)), Film(id=10, name=Терминатор, description=Фильм про восстание машин, genre=1, releaseDate=2005-12-11, duration=121, mpa=Mpa(id=1))]");
     }
 
-    @Order(5)
-    @Test
-    @Transactional
-    void getMpasAllTest(){
-        assertEquals(filmService.getMpas().toString(), "[Mpa(ratingId=1, ratingName=G), Mpa(ratingId=5, ratingName=NC-17), Mpa(ratingId=2, ratingName=PG), Mpa(ratingId=3, ratingName=PG-13), Mpa(ratingId=4, ratingName=R)]");
-    }
-
-    @Order(6)
-    @Test
-    @Transactional
-    void getMpasOneTest(){
-        assertEquals(filmService.getMpas(1).toString(), "Mpa(ratingId=1, ratingName=G)");
-    }
-
-    @Order(7)
-    @Test
-    @Transactional
-    void getGenresAllTest(){
-        assertEquals(filmService.getGenres().toString(), "[Genre(genre_id=6, category=ACTION_MOVIE), Genre(genre_id=3, category=CARTOON), Genre(genre_id=1, category=COMEDY), Genre(genre_id=5, category=DOCUMENTARY), Genre(genre_id=2, category=DRAMA), Genre(genre_id=4, category=THRILLER)]");
-    }
-
-    @Order(8)
-    @Test
-    @Transactional
-    void getGenressOneTest(){
-        assertEquals(filmService.getGenres(1).toString(), "Genre(genre_id=1, category=COMEDY)");
-    }
+//    @Order(5)
+//    @Test
+//    @Transactional
+//    void getMpasAllTest(){
+//        assertEquals(filmService.getMpas().toString(), "[Mpa(ratingId=1, ratingName=G), Mpa(ratingId=5, ratingName=NC-17), Mpa(ratingId=2, ratingName=PG), Mpa(ratingId=3, ratingName=PG-13), Mpa(ratingId=4, ratingName=R)]");
+//    }
+//
+//    @Order(6)
+//    @Test
+//    @Transactional
+//    void getMpasOneTest(){
+//        assertEquals(filmService.getMpas(1).toString(), "Mpa(ratingId=1, ratingName=G)");
+//    }
+//
+//    @Order(7)
+//    @Test
+//    @Transactional
+//    void getGenresAllTest(){
+//        assertEquals(filmService.getGenres().toString(), "[Genre(genre_id=6, category=ACTION_MOVIE), Genre(genre_id=3, category=CARTOON), Genre(genre_id=1, category=COMEDY), Genre(genre_id=5, category=DOCUMENTARY), Genre(genre_id=2, category=DRAMA), Genre(genre_id=4, category=THRILLER)]");
+//    }
+//
+//    @Order(8)
+//    @Test
+//    @Transactional
+//    void getGenressOneTest(){
+//        assertEquals(filmService.getGenres(1).toString(), "Genre(genre_id=1, category=COMEDY)");
+//    }
 }
