@@ -13,24 +13,32 @@ public class Film{
     private int genre;
     private LocalDate releaseDate;
     private int duration;
-    private int rate;
+    private Mpa mpa;
 
-    public Film(Integer id, String name, String description, int genre, LocalDate releaseDate, int duration, int rate) {
+    public Film(Integer id, String name, String description, int genre, LocalDate releaseDate, int duration, Mpa mpa) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.genre = genre;
         this.releaseDate = releaseDate;
         this.duration = duration;
-        this.rate = rate;
+        this.mpa = mpa;
     }
 
-    public Film(String name, String description, int genre, LocalDate releaseDate, int duration, int rate) {
+    public Film(String name, String description, int genre, LocalDate releaseDate, int duration, Mpa mpa) {
         this.name = name;
         this.description = description;
         this.genre = genre;
         this.releaseDate = releaseDate;
         this.duration = duration;
-        this.rate = rate;
+        this.mpa = mpa;
+    }
+
+    public Mpa getMpa() {
+        return mpa;
+    }
+
+    public void setMpa(Mpa mpa) {
+        this.mpa = mpa;
     }
 }

@@ -47,7 +47,7 @@ public class FilmDbStorage implements FilmStorage{
                 stmt.setInt(3, film.getGenre());
                 stmt.setDate(4, Date.valueOf(film.getReleaseDate()));
                 stmt.setInt(5, film.getDuration());
-                stmt.setInt(6, film.getRate());
+                stmt.setInt(6, film.getMpa().getRatingId());
                 return stmt;
             }, keyHolder);
         return this.getFilm(keyHolder.getKey().intValue());
@@ -66,7 +66,7 @@ public class FilmDbStorage implements FilmStorage{
             stmt.setInt(3, film.getGenre());
             stmt.setDate(4, Date.valueOf(film.getReleaseDate()));
             stmt.setInt(5, film.getDuration());
-            stmt.setInt(6, film.getRate());
+            stmt.setInt(6, film.getMpa().getRatingId());
             stmt.setInt(7, film.getId());
             return stmt;
         }, keyHolder);
@@ -138,17 +138,6 @@ public class FilmDbStorage implements FilmStorage{
         return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> makeFilm(rs), count);
     }
 
-    private Film makeFilm(ResultSet rs) throws SQLException {
-        Integer id = rs.getInt("film_id");
-        String name = rs.getString("name");
-        String description = rs.getString("description");
-        Integer genre = rs.getInt("genre");
-        LocalDate releaseDate = rs.getDate("release_date").toLocalDate();
-        Integer duration = rs.getInt("duration");
-        Integer rating = rs.getInt("rating");
-        return new Film(id, name, description, genre, releaseDate, duration, rating);
-    }
-
     private Genre makeGenre(ResultSet rs) throws SQLException{
         Integer genreId = rs.getInt("genre_id");
         String category = rs.getString("category");
@@ -159,5 +148,18 @@ public class FilmDbStorage implements FilmStorage{
         Integer ratingId = rs.getInt("rating_id");
         String ratingName = rs.getString("rating_name");
         return new Mpa(ratingId, ratingName);
+    }
+
+    private Film makeFilm(ResultSet rs) throws SQLException {
+        Integer id = rs.getInt("film_id");
+        String name = rs.getString("name");
+        String description = rs.getString("description");
+        Integer genre = rs.getInt("genre");
+        LocalDate releaseDate = rs.getDate("release_date").toLocalDate();
+        Integer duration = rs.getInt("duration");
+        Integer rating = rs.getInt("rating");
+        String sqlQuery = "select * from mpa where rating_id = ?";
+        Mpa mpa = jdbcTemplate.queryForObject(sqlQuery, (rsn, rowNum) -> makeMpa(rsn), rating);
+        return new Film(id, name, description, genre, releaseDate, duration, mpa);
     }
 }
