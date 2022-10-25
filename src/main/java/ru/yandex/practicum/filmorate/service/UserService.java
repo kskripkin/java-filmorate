@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.UserStorage;
+import ru.yandex.practicum.filmorate.validate.Validate;
 
 import java.util.Collection;
 
@@ -77,7 +78,17 @@ public class UserService {
     }
 
     public User createUser(User user){
-        return userStorage.createUser(user);
+        if(Validate.isValidUser(user)) {
+            if(user.getName() == null || user.getName() == ""){
+                user.setName(user.getLogin());
+            }
+            log.info("Добавлен пользователь: {}", user.toString());
+            return userStorage.createUser(user);
+        } else {
+            log.error("Ошибка входящих данных. Проверьте переданные данные.");
+            throw new ValidationException("Ошибка входящих данных. Проверьте переданные данные.");
+        }
+
     }
 
     public User updateUser(User user){

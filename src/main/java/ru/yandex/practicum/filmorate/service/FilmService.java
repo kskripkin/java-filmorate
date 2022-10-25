@@ -1,15 +1,21 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage.UserStorage;
+import ru.yandex.practicum.filmorate.validate.Validate;
 
 import java.util.*;
 
+@Slf4j
 @Service
 //@RequiredArgsConstructor
 public class FilmService {
@@ -69,7 +75,14 @@ public class FilmService {
     }
 
     public Film addFilm(Film film){
-        return filmStorage.addFilm(film);
+        if(Validate.isValidFilm(film)) {
+            log.debug("Добавлен фильм: {}", film.toString());
+            return filmStorage.addFilm(film);
+        } else {
+            log.error("Ошибка входящих данных. Проверьте переданные данные.");
+            throw new ValidationException("Ошибка входящих данных. Проверьте переданные данные.");
+        }
+
     }
 
     public Film updateFilm(Film film){
@@ -77,5 +90,27 @@ public class FilmService {
             throw new FilmNotFoundException("Film not found");
         }
         return filmStorage.updateFilm(film);
+    }
+
+    public Collection<Genre> getGenres(){
+        return filmStorage.getGenres();
+    }
+
+    public Genre getGenres(Integer id){
+        if(id == null){
+            throw new ValidationException("Genre id = null");
+        }
+        return filmStorage.getGenres(id);
+    }
+
+    public Collection<Mpa> getMpas(){
+        return filmStorage.getMpas();
+    }
+
+    public Mpa getMpas(Integer id){
+        if(id == null){
+            throw new ValidationException("Mpa id = null");
+        }
+        return filmStorage.getMpas(id);
     }
 }

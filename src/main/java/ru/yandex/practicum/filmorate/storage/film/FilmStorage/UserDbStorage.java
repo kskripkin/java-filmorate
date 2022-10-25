@@ -1,29 +1,24 @@
 package ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage.UserStorage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Map;
+import java.util.List;
 
-@Slf4j
-@Qualifier
+@Component
 public class UserDbStorage implements UserStorage{
 
     private final JdbcTemplate jdbcTemplate;
 
     public UserDbStorage(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate=jdbcTemplate;
-    }
-
-    @Override
-    public Map<Integer, User> getUserSourceMap() {
-        return null;
     }
 
     @Override
@@ -44,7 +39,7 @@ public class UserDbStorage implements UserStorage{
     @Override
     public User createUser(User user) {
         String sqlQuery = "insert into users(email, login, name, birthday) " +
-                "values (?, ?, ?)";
+                "values (?, ?, ?, ?)";
         jdbcTemplate.update(sqlQuery,
                 user.getEmail(),
                 user.getLogin(),
@@ -66,7 +61,7 @@ public class UserDbStorage implements UserStorage{
                 user.getBirthday(),
                 user.getId()
         );
-        return jdbcTemplate.queryForObject(sqlQuery, (rs, rowNum) -> makeUser(rs), user.getId());
+        return this.getUser(user.getId());
     }
 
     @Override
@@ -107,16 +102,14 @@ public class UserDbStorage implements UserStorage{
 
     @Override
     public Collection<User> getFriends(int id){
-        String sqlQuery = "select friend_id from friends as fr " +
-                            "join users as us on fr.friend_id = us.user_id " +
-                            "where fr.user_id = ?";
+        String sqlQuery = "select users.user_id, users.email, users.login, users.name, users.birthday from users join friends on users.user_id = friends.user_id where friends.friend_id = ?";//неверная
         return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> makeUser(rs), id);
     }
 
     @Override
     public Collection<User> getJoinListFriends(int id, int otherId){
         String sqlQuery = "select * from users " +
-                "where user_id in (select friend_id from friends as fr1 " +
+                "where user_id in (select fr1.friend_id from friends as fr1 " +
                 "join friends as fr2 on fr1.friend_id = fr2.friend_id " +
                 "where fr1.user_id = ? or fr2.user_id = ?)";
         return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> makeUser(rs), id, otherId);

@@ -2,19 +2,19 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage.FilmStorage;
 
 import java.util.*;
 
 @Slf4j
 @RestController
-//@RequiredArgsConstructor
 public class FilmController {
 
-//    private final FilmStorage filmStorage;
     private final FilmService filmService;
 
     public FilmController(FilmService filmService) {
@@ -63,4 +63,23 @@ public class FilmController {
         return filmService.showPopularFilms(count);
     }
 
+    @GetMapping("/genres")
+    public Collection<Genre> getGenres(){
+        return filmService.getGenres();
+    }
+
+    @GetMapping("/genres/{id}")
+    public Genre getGenres(@PathVariable int id){
+        return filmService.getGenres(id);
+    }
+
+    @GetMapping("/mpa")
+    public Collection<Mpa> getMpas(){
+        return filmService.getMpas();
+    }
+
+    @GetMapping("/mpa/{id}")
+    public Mpa getMpas(@PathVariable int id){
+        return filmService.getMpas(id);
+    }
 }

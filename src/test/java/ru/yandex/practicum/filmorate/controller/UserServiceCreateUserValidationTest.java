@@ -3,41 +3,35 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage.UserStorage;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserControllerTest {
+@SpringBootTest
+@AutoConfigureTestDatabase
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+class UserServiceCreateUserValidationTest {
 
-    private UserController userController;
+    private final UserService userService;
     private User user;
-    private UserStorage userStorage;
-    private UserService userService;
 
     @BeforeEach
     public void BeforeEach(){
-        userStorage = new InMemoryUserStorage();
-        userService = new UserService(userStorage);
-        userController = new UserController(userService);
-        //user = new User();
-        user.setName("Вася");
-        user.setId(1);
-        user.setLogin("Vasja123");
-        user.setEmail("Vasja@yandex.ru");
-        user.setBirthday(LocalDate.of(2000, 10, 11));
+        user = new User(1, "Вася", "Vasja123", "Vasja@yandex.ru", LocalDate.of(2000, 10, 11));
     }
 
     @Test
     void createUserEmailIsBlanc() {
         user.setEmail("");
         Throwable thrown = assertThrows(ValidationException.class, () -> {
-            userController.createUser(user);
+            userService.createUser(user);
         });
         assertNotNull(thrown.getMessage());
     }
@@ -46,7 +40,7 @@ class UserControllerTest {
     void createUserEmailNonIncludeDog() {
         user.setEmail("Vasjayandex.ru");
         Throwable thrown = assertThrows(ValidationException.class, () -> {
-            userController.createUser(user);
+            userService.createUser(user);
         });
         assertNotNull(thrown.getMessage());
     }
@@ -55,7 +49,7 @@ class UserControllerTest {
     void createUserLoginNonSpace() {
         user.setLogin("Vasja 123");
         Throwable thrown = assertThrows(ValidationException.class, () -> {
-            userController.createUser(user);
+            userService.createUser(user);
         });
         assertNotNull(thrown.getMessage());
     }
@@ -64,7 +58,7 @@ class UserControllerTest {
     void createUserLoginIsBlanc() {
         user.setEmail("");
         Throwable thrown = assertThrows(ValidationException.class, () -> {
-            userController.createUser(user);
+            userService.createUser(user);
         });
         assertNotNull(thrown.getMessage());
     }
@@ -73,7 +67,7 @@ class UserControllerTest {
     void createUserBirthdayAfterNow() {
         user.setBirthday(LocalDate.now().plusDays(1));
         Throwable thrown = assertThrows(ValidationException.class, () -> {
-            userController.createUser(user);
+            userService.createUser(user);
         });
         assertNotNull(thrown.getMessage());
     }
