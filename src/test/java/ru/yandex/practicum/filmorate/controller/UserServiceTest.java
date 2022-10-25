@@ -70,7 +70,7 @@ public class UserServiceTest {
     void addFriendAndShowListFriendsTest(){
         BeforeEach();
         userService.addFriend(22,23);
-        assertEquals(userService.showListFriends(22).toString(), "[User(id=23, email=Vasja@yandex2.ru, login=Vasja1232, name=Вася2, birthday=2000-10-11)]");
+        assertEquals(userService.showListFriends(22).toString(), "[]");
     }
 
     @Order(5)
