@@ -106,8 +106,4 @@ class FilmServiceTest {
     void getGenressOneTest(){
         assertEquals(filmService.getGenres(1).toString(), "Genre(genre_id=1, category=COMEDY)");
     }
-
-
-
-
 }

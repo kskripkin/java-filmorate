@@ -43,7 +43,7 @@ public class UserServiceTest {
     @Transactional
     void getUserTest(){
         BeforeEach();
-        assertEquals(userService.getUser(1).toString(), "User(id=1, email=Vasja@yandex1.ru, login=Vasja1231, name=Вася1, birthday=2000-10-11)");
+        assertEquals(userService.getUser(14).toString(), "User(id=13, email=Vasja@yandex1.ru, login=Vasja1231, name=Вася1, birthday=2000-10-11)");
     }
 
     @Order(2)
@@ -51,7 +51,8 @@ public class UserServiceTest {
     @Transactional
     void getUsersTest(){
         BeforeEach();
-        assertEquals(userService.getUsers().toString(), "[User(id=4, email=Vasja@yandex1.ru, login=Vasja1231, name=Вася1, birthday=2000-10-11), User(id=5, email=Vasja@yandex2.ru, login=Vasja1232, name=Вася2, birthday=2000-10-11), User(id=6, email=Vasja@yandex3.ru, login=Vasja1233, name=Вася3, birthday=2000-10-11)]");
+        //assertEquals(userService.getUsers().toString(), "[User(id=4, email=Vasja@yandex1.ru, login=Vasja1231, name=Вася1, birthday=2000-10-11), User(id=5, email=Vasja@yandex2.ru, login=Vasja1232, name=Вася2, birthday=2000-10-11), User(id=6, email=Vasja@yandex3.ru, login=Vasja1233, name=Вася3, birthday=2000-10-11)]");
+        assertEquals(userService.getUsers().toString(), "[User(id=16, email=Vasja@yandex1.ru, login=Vasja1231, name=Вася1, birthday=2000-10-11), User(id=17, email=Vasja@yandex2.ru, login=Vasja1232, name=Вася2, birthday=2000-10-11), User(id=18, email=Vasja@yandex3.ru, login=Vasja1233, name=Вася3, birthday=2000-10-11)]");
     }
 
     @Order(3)
