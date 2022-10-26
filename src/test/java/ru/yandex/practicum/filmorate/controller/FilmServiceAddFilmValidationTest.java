@@ -8,10 +8,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,8 +27,9 @@ class FilmServiceAddFilmValidationTest {
 
     @BeforeEach
     public void BeforeEach(){
-        Mpa mpa = new Mpa(1);
-        film = new Film(1, "Терминатор", "Фильм про восстание машин", 1, LocalDate.of(2005, 12,11), 120, mpa);
+        ArrayList<Genre> genreArrayList = new ArrayList<>();
+        genreArrayList.add(new Genre(1));
+        film = new Film(1, "Терминатор", "Фильм про восстание машин", genreArrayList, 1, LocalDate.of(2005, 12,11), 120, new Mpa(1));
     }
 
     @Test

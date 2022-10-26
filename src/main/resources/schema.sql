@@ -27,10 +27,16 @@ CREATE TABLE IF NOT EXISTS FILMS (
                                      film_id INTEGER PRIMARY KEY AUTO_INCREMENT,
                                      name VARCHAR(50) NOT NULL,
                                      description VARCHAR(200),
-                                     genre INTEGER,
+                                     rate INTEGER,
                                      release_date DATE,
                                      duration INTEGER,
-                                     rating INTEGER REFERENCES MPA (rating_id)
+                                     mpa INTEGER REFERENCES MPA (rating_id)
+);
+
+CREATE TABLE IF NOT EXISTS GENRES_FILM (
+                                     id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                                     film_id INTEGER REFERENCES FILMS (film_id),
+                                     genre_id INTEGER REFERENCES GENRES (genre_id)
 );
 
 CREATE TABLE IF NOT EXISTS LIKES (
