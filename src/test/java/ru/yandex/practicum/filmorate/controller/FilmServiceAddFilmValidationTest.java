@@ -29,7 +29,7 @@ class FilmServiceAddFilmValidationTest {
     public void BeforeEach(){
         ArrayList<Genre> genreArrayList = new ArrayList<>();
         genreArrayList.add(new Genre(1));
-        film = new Film(1, "Терминатор", "Фильм про восстание машин", genreArrayList, 1, LocalDate.of(2005, 12,11), 120, new Mpa(1));
+        film = new Film(1, "Терминатор", "Фильм про восстание машин", genreArrayList, 1, LocalDate.of(2005, 12,11), 120, new Mpa(1, "G"));
     }
 
     @Test

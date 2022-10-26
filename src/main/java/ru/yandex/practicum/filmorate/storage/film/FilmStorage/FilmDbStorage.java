@@ -166,7 +166,8 @@ public class FilmDbStorage implements FilmStorage{
 
     private Mpa makeMpa(ResultSet rs) throws SQLException{
         Integer id = rs.getInt("rating_id");
-        return new Mpa(id);
+        String name = rs.getString("rating_name");
+        return new Mpa(id, name);
     }
 
     private Collection<Genre> getGenresListId(Integer film_id) {
@@ -189,6 +190,6 @@ public class FilmDbStorage implements FilmStorage{
         genreArrayList = new ArrayList<>();
         genreArrayList.addAll(getGenresListId(id));
 
-        return new Film(id, name, description, genreArrayList, rate, releaseDate, duration, new Mpa(mpa));
+        return new Film(id, name, description, genreArrayList, rate, releaseDate, duration, this.getMpas(mpa));
     }
 }
