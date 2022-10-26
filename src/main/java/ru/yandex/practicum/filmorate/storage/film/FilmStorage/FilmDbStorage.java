@@ -57,7 +57,10 @@ public class FilmDbStorage implements FilmStorage{
             String sqlQueryGenresFilm = "insert into genres_film(genre_id, film_id) " +
                     "values(?, ?)";
             for (int i = 0; i < film.getGenres().size(); i++) {
-                jdbcTemplate.update(sqlQueryGenresFilm, film.getGenres().get(i).getId(), returnsFilmId);
+       //         if (jdbcTemplate.update("select * from genres_film where genre_id = ? and film_id = ?",
+        //                                                film.getGenres().get(i).getId(), returnsFilmId) == 0) {
+                    jdbcTemplate.update(sqlQueryGenresFilm, film.getGenres().get(i).getId(), returnsFilmId);
+        //        }
             }
         }
         return this.getFilm(returnsFilmId);
@@ -88,7 +91,11 @@ public class FilmDbStorage implements FilmStorage{
             String sqlQueryGenresFilm = "insert into genres_film(genre_id, film_id) " +
                 "values(?, ?)";
             for (int i = 0; i < film.getGenres().size(); i++) {
-                jdbcTemplate.update(sqlQueryGenresFilm, film.getGenres().get(i).getId(), returnsFilmId);
+                int temp = jdbcTemplate.queryForObject("select count(*) from genres_film where genre_id = ? and film_id = ?",
+                        new Object[]{film.getGenres().get(i).getId(), returnsFilmId}, Integer.class);
+                if (temp == 0) {
+                    jdbcTemplate.update(sqlQueryGenresFilm, film.getGenres().get(i).getId(), returnsFilmId);
+                }
             }
         }
         return this.getFilm(returnsFilmId);
