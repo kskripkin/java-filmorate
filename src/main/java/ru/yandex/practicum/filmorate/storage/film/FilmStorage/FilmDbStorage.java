@@ -156,7 +156,8 @@ public class FilmDbStorage implements FilmStorage{
 
     @Override
     public Collection<Genre> getGenres() {
-        String sqlQuery = "select * from genres";
+
+        String sqlQuery = "select * from genres order by genre_id";
         return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> makeGenre(rs));
     }
 

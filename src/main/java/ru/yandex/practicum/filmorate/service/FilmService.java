@@ -94,8 +94,8 @@ public class FilmService {
     }
 
     public Genre getGenres(Integer id){
-        if(id == null){
-            throw new ValidationException("Genre id = null");
+        if(id == null || id < 0){
+            throw new FilmNotFoundException("Genres not found");
         }
         return filmStorage.getGenres(id);
     }
