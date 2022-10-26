@@ -51,11 +51,14 @@ public class FilmDbStorage implements FilmStorage{
                 return stmt;
             }, keyHolder);
 
+
         int returnsFilmId = keyHolder.getKey().intValue();
-        String sqlQueryGenresFilm = "insert into genres_film(genre_id, film_id) " +
-                        "values(?, ?)";
-        for (int i = 0; i < film.getGenres().size(); i++) {
-            jdbcTemplate.update(sqlQueryGenresFilm, film.getGenres().get(i).getId(), returnsFilmId);
+        if (film.getGenres() != null) {
+            String sqlQueryGenresFilm = "insert into genres_film(genre_id, film_id) " +
+                    "values(?, ?)";
+            for (int i = 0; i < film.getGenres().size(); i++) {
+                jdbcTemplate.update(sqlQueryGenresFilm, film.getGenres().get(i).getId(), returnsFilmId);
+            }
         }
         return this.getFilm(returnsFilmId);
     }
@@ -79,12 +82,14 @@ public class FilmDbStorage implements FilmStorage{
         }, keyHolder);
 
         int returnsFilmId = keyHolder.getKey().intValue();
-/*        String sqlQueryGenresFilm = "insert into genres_film(genre_id, film_id) " +
+/*
+        if (film.getGenres() != null) {
+            String sqlQueryGenresFilm = "insert into genres_film(genre_id, film_id) " +
                 "values(?, ?)";
-        for (int i = 0; i < film.getGenres().size(); i++) {
-            jdbcTemplate.update(sqlQueryGenresFilm, film.getGenres().get(i), returnsFilmId);
+            for (int i = 0; i < film.getGenres().size(); i++) {
+                jdbcTemplate.update(sqlQueryGenresFilm, film.getGenres().get(i), returnsFilmId);
+            }
         }
-
  */
         return this.getFilm(returnsFilmId);
     }
