@@ -82,15 +82,15 @@ public class FilmDbStorage implements FilmStorage{
         }, keyHolder);
 
         int returnsFilmId = keyHolder.getKey().intValue();
-/*
         if (film.getGenres() != null) {
+            String sqlQueryDeleteGenresFilm = "delete from genres_film where film_id = ?";
+            jdbcTemplate.update(sqlQueryDeleteGenresFilm, returnsFilmId);
             String sqlQueryGenresFilm = "insert into genres_film(genre_id, film_id) " +
                 "values(?, ?)";
             for (int i = 0; i < film.getGenres().size(); i++) {
-                jdbcTemplate.update(sqlQueryGenresFilm, film.getGenres().get(i), returnsFilmId);
+                jdbcTemplate.update(sqlQueryGenresFilm, film.getGenres().get(i).getId(), returnsFilmId);
             }
         }
- */
         return this.getFilm(returnsFilmId);
     }
 
