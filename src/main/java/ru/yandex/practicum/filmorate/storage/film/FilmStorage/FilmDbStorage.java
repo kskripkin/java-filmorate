@@ -161,7 +161,8 @@ public class FilmDbStorage implements FilmStorage{
 
     private Genre makeGenre(ResultSet rs) throws SQLException{
         Integer id = rs.getInt("genre_id");
-        return new Genre(id);
+        String name = rs.getString("category");
+        return new Genre(id, name);
     }
 
     private Mpa makeMpa(ResultSet rs) throws SQLException{
@@ -171,12 +172,9 @@ public class FilmDbStorage implements FilmStorage{
     }
 
     private Collection<Genre> getGenresListId(Integer film_id) {
-        String sqlQuery = "select genre_id from genres_film where film_id = ?";
-        return jdbcTemplate.query(sqlQuery, (rsn, rowNum) -> makeGenreFromFilm(rsn), film_id);
-    }
-
-    private Genre makeGenreFromFilm(ResultSet rs) throws SQLException {
-        return new Genre(rs.getInt("genre_id"));
+        //String sqlQuery = "select genre_id from genres_film where film_id = ?";
+        String sqlQuery = "select genres.genre_id, genres.category from genres join genres_film on genres.genre_id = genres_film.genre_id where genres_film.film_id = ?";
+        return jdbcTemplate.query(sqlQuery, (rsn, rowNum) -> makeGenre(rsn), film_id);
     }
 
     private Film makeFilm(ResultSet rs) throws SQLException {
