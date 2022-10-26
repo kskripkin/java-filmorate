@@ -105,8 +105,8 @@ public class FilmService {
     }
 
     public Mpa getMpas(Integer id){
-        if(id == null){
-            throw new ValidationException("Mpa id = null");
+        if(id == null || id < 0){
+            throw new FilmNotFoundException("Mpa not found");
         }
         return filmStorage.getMpas(id);
     }
