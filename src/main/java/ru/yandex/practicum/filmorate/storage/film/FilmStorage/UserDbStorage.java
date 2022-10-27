@@ -108,8 +108,8 @@ public class UserDbStorage implements UserStorage{
     public Collection<User> getFriends(int id){
         String sqlQuery = "select users.user_id, users.email, users.login, users.name, users.birthday " +
                 "from users " +
-                "join friends on users.user_id = friends.user_id " +
-                "where friends.friend_id = ?";
+                "join friends on users.user_id = friends.friend_id " +
+                "where friends.user_id = ?";
         return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> makeUser(rs), id);
     }
 
