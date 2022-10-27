@@ -115,10 +115,23 @@ public class UserDbStorage implements UserStorage{
 
     @Override
     public Collection<User> getJoinListFriends(int id, int otherId){
-        String sqlQuery = "select * from users " +
-                "where user_id in (select fr1.friend_id from friends as fr1 " +
-                "join friends as fr2 on fr1.friend_id = fr2.friend_id " +
-                "where fr1.user_id = ? or fr2.user_id = ?)";
+            String sqlQuery = "select * from users where user_id in ( " +
+                                                "select friend_id from ( " +
+                                                        "select friend_id " +
+                                                        "from friends " +
+                                                        "where user_id = ? " +
+                                                        "UNION ALL " +
+                                                        "select friend_id " +
+                                                        "from friends " +
+                                                        "where user_id = ? " +
+                                                ") " +
+                                                "group by friend_id " +
+                                                "having count(friend_id)=2 " +
+                                    ") ";
+//        String sqlQuery = "select * from users " +
+//                "where user_id in (select fr1.friend_id from friends as fr1 " +
+//                "join friends as fr2 on fr1.friend_id = fr2.friend_id " +
+//                "where fr1.user_id = ? or fr2.user_id = ?)";
         return jdbcTemplate.query(sqlQuery, (rs, rowNum) -> makeUser(rs), id, otherId);
     }
 }
