@@ -87,7 +87,6 @@ public class UserService {
             log.error("Error input data. Check request");
             throw new ValidationException("Error input data. Check request");
         }
-
     }
 
     public User updateUser(User user){

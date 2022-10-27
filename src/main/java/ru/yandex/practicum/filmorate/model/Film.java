@@ -38,7 +38,6 @@ public class Film{
         this.mpa = mpa;
     }
 
-
     public Mpa getMpa() {
         return mpa;
     }
