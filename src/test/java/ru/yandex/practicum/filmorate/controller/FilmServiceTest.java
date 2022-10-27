@@ -55,7 +55,7 @@ class FilmServiceTest {
     @Transactional
     void addAndDeleteLikeTest(){
         BeforeEach();
-        assertEquals(filmService.addLike(1, 1).toString(), "Film(id=1, name=Терминатор, description=Фильм про восстание машин, rate=1 ,genres=[Genre(id=1, name=Комедия)], releaseDate=2005-12-11, duration=121, mpa=Mpa(id=1, name=G))");
+        assertEquals(filmService.addLike(1, 1).toString(), "Film(id=1, name=Терминатор, description=Фильм про восстание машин, rate=1, genres=[Genre(id=1, name=Комедия)], releaseDate=2005-12-11, duration=121, mpa=Mpa(id=1, name=G))");
         assertEquals(filmService.deleteLike(1, 1).toString(), "Film(id=1, name=Терминатор, description=Фильм про восстание машин, rate=1, genres=[Genre(id=1, name=Комедия)], releaseDate=2005-12-11, duration=121, mpa=Mpa(id=1, name=G))");
     }
 
@@ -87,6 +87,6 @@ class FilmServiceTest {
         filmService.addLike(12, 11);
         filmService.addLike(12, 12);
 
-        assertEquals(filmService.showPopularFilms(3).toString(), "[Film(id=12, name=Терминатор3, description=Фильм про восстание машин, rate=1, genres=[Genre(id=1, name=Комедия)], releaseDate=2005-12-11, duration=123, mpa=Mpa(id=1)), Film(id=10, name=Терминатор, description=Фильм про восстание машин, rate=1, genre=1, releaseDate=2005-12-11, duration=121, mpa=Mpa(id=1, name=G))]");
+        assertEquals(filmService.showPopularFilms(3).toString(), "[Film(id=12, name=Терминатор3, description=Фильм про восстание машин, rate=3, genres=[Genre(id=1, name=Комедия)], releaseDate=2005-12-11, duration=123, mpa=Mpa(id=1, name=G)), Film(id=10, name=Терминатор, description=Фильм про восстание машин, rate=1, genres=[Genre(id=1, name=Комедия)], releaseDate=2005-12-11, duration=121, mpa=Mpa(id=1, name=G)), Film(id=11, name=Терминатор2, description=Фильм про восстание машин, rate=2, genres=[Genre(id=1, name=Комедия)], releaseDate=2005-12-11, duration=122, mpa=Mpa(id=1, name=G))]");
     }
 }
