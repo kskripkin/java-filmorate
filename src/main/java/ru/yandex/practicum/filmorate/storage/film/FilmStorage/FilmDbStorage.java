@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,16 +19,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Component
+@RequiredArgsConstructor
 public class FilmDbStorage implements FilmStorage{
 
     private final JdbcTemplate jdbcTemplate;
 
     private KeyHolder keyHolder;
     private ArrayList<Genre> genreArrayList;
-
-    public FilmDbStorage(JdbcTemplate jdbcTemplate){
-        this.jdbcTemplate=jdbcTemplate;
-    }
 
     @Override
     public Collection<Film> getFilms() {
