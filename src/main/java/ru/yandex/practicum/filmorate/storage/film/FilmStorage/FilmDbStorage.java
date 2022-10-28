@@ -14,7 +14,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -180,16 +179,15 @@ public class FilmDbStorage implements FilmStorage{
     }
 
     private Film makeFilm(ResultSet rs) throws SQLException {
-        Integer id = rs.getInt("film_id");
-        String name = rs.getString("name");
-        String description = rs.getString("description");
-        Integer rate = rs.getInt("rate");
-        LocalDate releaseDate = rs.getDate("release_date").toLocalDate();
-        Integer duration = rs.getInt("duration");
-        Integer mpa = rs.getInt("mpa");
         genreArrayList = new ArrayList<>();
-        genreArrayList.addAll(getGenresListId(id));
+        genreArrayList.addAll(getGenresListId(rs.getInt("film_id")));
 
-        return new Film(id, name, description, genreArrayList, rate, releaseDate, duration, this.getMpas(mpa));
+        return new Film(rs.getInt("film_id"),
+                rs.getString("name"),
+                rs.getString("description"),
+                genreArrayList, rs.getInt("rate"),
+                rs.getDate("release_date").toLocalDate(),
+                rs.getInt("duration"),
+                this.getMpas(rs.getInt("mpa")));
     }
 }
