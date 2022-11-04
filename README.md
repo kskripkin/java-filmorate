@@ -17,9 +17,16 @@
 
 ## Cписок общих друзей с другим пользователем
 
-####SELECT *
-####FROM (
-####  SELECT DISTINCT user_id 
-####  FROM friends
-####  WHERE friend_id = U1 OR friend_id = U2) p1
-####JOIN users as u ON u.user_id  = p1.user_id 
+####select * from users where user_id in (
+####select friend_id from (
+####select friend_id
+####from friends
+####where user_id = 1
+####UNION ALL
+####select friend_id
+####from friends
+####where user_id = 3
+####)
+####group by friend_id
+####having count(friend_id)=2
+####)

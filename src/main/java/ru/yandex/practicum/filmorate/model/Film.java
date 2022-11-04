@@ -1,30 +1,56 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
 
 @Data
-public class Film implements Comparable<Film>{
+@NoArgsConstructor
+public class Film{
     private int id;
     private String name;
     private String description;
+    private int rate;
+    private ArrayList<Genre> genres;
     private LocalDate releaseDate;
     private int duration;
-    private Set<Long> likes = new HashSet<>();
+    private Mpa mpa;
 
-    public void setLike(long idUser){
-        likes.add(idUser);
+    public Film(int id, String name, String description, ArrayList<Genre> genres, int rate, LocalDate releaseDate, int duration, Mpa mpa) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.rate = rate;
+        this.genres = genres;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.mpa = mpa;
     }
 
-    public void deleteLike(long idUser){
-        likes.remove(idUser);
+    public Film(String name, String description, ArrayList<Genre> genres, int rate, LocalDate releaseDate, int duration, Mpa mpa) {
+        this.name = name;
+        this.description = description;
+        this.rate = rate;
+        this.genres = genres;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.mpa = mpa;
     }
 
-    @Override
-    public int compareTo(Film o){
-        return o.getLikes().size() - this.getLikes().size();
+    public Mpa getMpa() {
+        return mpa;
+    }
+
+    public void setMpa(Mpa mpa) {
+        this.mpa = mpa;
+    }
+
+    public ArrayList<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(ArrayList<Genre> genre) {
+        this.genres = genre;
     }
 }
